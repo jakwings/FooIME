@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>LSBackgroundOnly</key>
+        <true/>
+	<key>InputMethodConnectionName</key>
+	<string>com.github.jakwings.inputmethod.FooIME_Connection</string>
+        <key>InputMethodServerControllerClass</key>
+        <string>FooInputController</string>
+        <key>InputMethodServerDelegateClass</key>
+        <string>FooInputController</string>
+	<key>TISInputSourceID</key>
+	<string>com.github.jakwings.inputmethod.FooIME</string>
+	<key>TISIntendedLanguage</key>
+	<string>en</string>
+	<key>tsInputMethodCharacterRepertoire</key>
+	<array>
+		<string>Latn</string>
+	</array>
+	<key>tsInputMethodIconFileKey</key>
+	<string>icon</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>FooIME</string>
+	<key>CFBundleIconFile</key>
+	<string>icon</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.github.jakwings.inputmethod.FooIME</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>FooIME</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSignature</key>
+	<string>aplt</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersionByArchitecture</key>
+	<dict>
+		<key>x86_64</key>
+		<string>10.10</string>
+	</dict>
+	<key>LSRequiresCarbon</key>
+	<true/>
+	<key>LSUIElement</key>
+	<string>1</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>This software is licensed under the WTF Public License.</string>
+	<key>NSSupportsSuddenTermination</key>
+	<false/>
+</dict>
+</plist>
