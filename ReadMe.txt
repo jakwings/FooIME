@@ -19,3 +19,7 @@ Installation
 Run ./deploy.sh and deploy the IME to "$HOME/Library/Input Methods".
 
 Please make sure the IME is not activated for any application when deploying.
+
+To avoid the headache about deactivation/activation, use eval():
+
+  https://github.com/JXA-Cookbook/JXA-Cookbook/wiki/Importing-Scripts
