@@ -1,0 +1,139 @@
+#!/bin/ksh
+# @{ Globals
+
+# @{ profile
+
+typeset -C app=(
+    binary=FooIME
+    source=./build/${app.binary}.app
+    osxdir=${HOME:+$HOME/Library/Input Methods}
+    target="${app.osxdir:+${app.osxdir}/${app.binary}.app}"
+)
+
+# @}
+# @{ plist
+
+typeset -A plist=(
+             ['CFBundleDevelopmentRegion']=English
+                    ['CFBundleExecutable']=FooIME
+                      ['CFBundleIconFile']=icon
+                    ['CFBundleIdentifier']=com.github.jakwings.inputmethod.FooIME
+         ['CFBundleInfoDictionaryVersion']=6.0
+                          ['CFBundleName']=FooIME
+                   ['CFBundlePackageType']=APPL
+            ['CFBundleShortVersionString']=1.0
+                     ['CFBundleSignature']=aplt
+            ['CFBundleSupportedPlatforms']=( MacOSX )
+                       ['CFBundleVersion']=1
+             ['InputMethodConnectionName']=com.github.jakwings.inputmethod.FooIME_Connection
+      ['InputMethodServerControllerClass']=FooInputController
+        ['InputMethodServerDelegateClass']=FooInputController
+             ['LSApplicationCategoryType']=public.app-category.utilities
+                      ['LSBackgroundOnly']=true
+  ['LSMinimumSystemVersionByArchitecture']=( ['x86_64']=10.10)
+                      ['LSRequiresCarbon']=true
+                           ['LSUIElement']=1
+              ['NSHumanReadableCopyright']="This software is licensed under the MIT License."
+           ['NSSupportsSuddenTermination']=false
+                      ['TISInputSourceID']=com.github.jakwings.inputmethod.FooIME
+                   ['TISIntendedLanguage']=en
+      ['tsInputMethodCharacterRepertoire']=( Latn )
+              ['tsInputMethodIconFileKey']=icon
+)
+
+# @}
+
+# @}
+# @{ Routines
+
+# @{ func osaclean
+
+function osaclean {
+
+    [[ -d build ]] && rm -rf build
+
+}
+
+# @} /func
+# @{ func osainstall
+
+function osainstall {
+
+    # If the application is running, bring it down
+    [[ -n $(ps -ef | grep "${app.binary}" | grep -v grep) ]] && { sudo killall "${app.binary}" || true; }
+
+    # Clean-up the target folder (i.e. the application), if it exists
+    [[ -d ${app.target} ]] && rm -rf "${app.target}"
+
+    # Now copy the freshly build application to its target location
+    [[ -d ${app.source} ]] && cp -R  "${app.source}" "${app.osxdir}/"
+
+}
+
+# @} /func
+# @{ func osamake
+
+function osamake {
+
+    [[ -d build ]] && rm -rf build
+    mkdir build
+
+    osacompile -l JavaScript -a x86_64 -o ./build/FooIME.app -s main.js
+    osaplist > ./build/FooIME.app/Contents/Info.plist
+
+}
+
+# @} /func
+# @{ func osaplist
+
+function osaplist {
+
+    integer index=0 keycount=${#plist[@]}
+    print "{"
+    typeset key; for key in ${!plist[@]}; do
+	typeset comma=','; (( ++ index == keycount )) && unset comma
+
+	if [[ $key == @(tsInputMethodCharacterRepertoire|CFBundleSupportedPlatforms) ]]; then
+	    integer i=0 count=${#plist[$key][@]}
+	    print "  \"$key\" : ["
+	    typeset v; for v in ${plist[$key][@]}; do
+		typeset c=','; (( ++ i == count )) && unset c
+		print "    \"$v\"$c"
+	    done
+	    print "  ]$comma"
+
+	elif [[ $key == LSMinimumSystemVersionByArchitecture ]]; then
+	    integer i=0 count=${#plist[$key][@]}
+	    print "  \"$key\":{"
+	    typeset k; for k in ${!plist[$key][@]}; do
+		typeset c=','; (( ++ i == count )) && unset c
+		print "    \"$k\" : \"${plist[$key][$k]}\"$c"
+	    done
+	    print "  }$comma"
+
+	else
+	    typeset value=${plist[$key]}
+
+	    [[ $value == @(true|false|nul|+(\d)) ]] &&
+	    print "  \"$key\" : ${plist[$key]}$comma" ||
+	    print "  \"$key\" : \"${plist[$key]}\"$comma"
+	fi
+
+    done
+    print "}"
+
+}
+
+# @} /func
+
+# @}
+# @{ Main
+
+case $1 in
+make|'') osamake    ;;
+install) osainstall ;;
+clean)   osaclean   ;;
+esac
+
+# @}
+# vim: nu et tw=130 ts=8 sts=4 sw=4 ff=unix fo-=l fo+=tcroq2 fdm=marker fmr=@{,@} spell spelllang=en_gb
